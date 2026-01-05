@@ -10,7 +10,6 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// важная настройка для ngrok
 app.set("trust proxy", true);
 
 app.post("/lookup-ip", async (req, res) => {
@@ -18,7 +17,6 @@ app.post("/lookup-ip", async (req, res) => {
   if (!ip) return res.status(400).json({ error: "IP не указан" });
 
   try {
-    // Запрос к ipinfo
     const response = await fetch(`https://ipinfo.io/${ip}/json`);
     const data = await response.json();
     res.json(data);
@@ -27,4 +25,8 @@ app.post("/lookup-ip", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("✅ Сервер запущен на http://localhost:3000"));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Сервер запущен на порту ${PORT}`);
+});
